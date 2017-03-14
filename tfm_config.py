@@ -1,0 +1,69 @@
+# ------------------------------------------------------------------- #
+#                                                                     #
+#	MASTER EN BIG DATA ANALYTICS                                      #
+#                                                                     #
+#	TRABAJO FINAL DE MASTER                                           #
+#                                                                     #
+#                                                                     #
+#	- CARLOS MARTINEZ GOMEZ                                           #
+#	- ENRIQUE CASTELLO FERRE                                          #
+#                                                                     #
+# ------------------------------------------------------------------- #
+
+# ....................................................................
+# Config file with shared configuratin to launch python scripts
+# ....................................................................
+
+
+#####################################################################
+# Directories configurations
+#####################################################################
+
+# Main Project Directory
+baseDir = "/home/kike/Escritorio/TFM"
+
+# Data Directory
+dataDir = "/Data"
+# Data Directory With Absolute Path
+absoluteDataDir = baseDir + dataDir
+
+# Data Directory with Splited Raw Dataset
+splitDir="/Splited"
+# Data Directory With Splited Raw Dataset With Absolute Path
+absoluteSplitDir = absoluteDataDir + splitDir
+
+# Dataset In Files Per Customer
+customerFilesDir = "/PerCustomer"
+# Dataset In Files per Customer With Absolute Path
+absoluteCustomerFilesDir = absoluteDataDir + customerFilesDir
+
+# Dataset In Files Per Customer With 24c
+customer24CDir = "/Customer24C"
+# Dataset In Files per Customer Withn 24C and Absolute Path
+absoluteCustomer24CDir = absoluteDataDir + customer24CDir
+
+# Dataset In Files Per Day
+day24CDir = "/24CDay"
+# Dataset In Files per Customer With Absolute Path
+absoluteDay24CDir = absoluteDataDir + day24CDir
+
+# ClusterDatasetName
+clusterDataset = "DayReadings.csv"
+# Cluster Dataset Name Absolute Path
+absoluteClusterDataset = absoluteDataDir + "/" + clusterDataset
+
+#####################################################################
+# Aux variables configuration
+#####################################################################
+
+# Determine if print log messages
+verbose = True
+
+# CSV file delimiters
+csvDelimiter = ","
+
+# Delete data from previous execution
+deleteDataPrevExec = True
+
+
+
