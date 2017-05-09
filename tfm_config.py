@@ -52,6 +52,32 @@ clusterDataset = "DayReadings.csv"
 # Cluster Dataset Name Absolute Path
 absoluteClusterDataset = absoluteDataDir + "/" + clusterDataset
 
+# CustomerClusterDatasetName
+customerClusterDataset = "CustomerDayReadings.csv"
+# Cluster Dataset Name Absolute Path
+absoluteCustomerClusterDataset = absoluteDataDir + "/" + customerClusterDataset
+
+# Clustering Logs Directory
+clusteringLogDirName = "ClusteringLog"
+# Clustering Logs Directory Absolute Path
+absoluteclusteringLogDir = baseDir + "/" + clusteringLogDirName
+
+# Clustering Models Directory
+clusteringModelsDirName = "ClusteringModels"
+# Clustering Models Directory Absolute Path
+absoluteClusteringModelsDirName = baseDir + "/" + clusteringModelsDirName
+
+# Clustering Classification Results Directory
+clusteringClassResDir = "ClusteringClassifications"
+# Clustering Classification Results Directory Absolute Path
+absoluteClusteringClassResDir = baseDir + "/" + clusteringClassResDir
+
+# Customer Clusters Ocurrences File Name
+perCustomerClustFileName = 'perCustomer'
+
+# Customer Clusters File Name
+clustersPerCustomerClustFileName = 'clustersPerCustomer'
+
 #####################################################################
 # Aux variables configuration
 #####################################################################
@@ -65,5 +91,22 @@ csvDelimiter = ","
 # Delete data from previous execution
 deleteDataPrevExec = True
 
+#Spark App Name
+TFM_appName = "TFM"
 
 
+#####################################################################
+# Clustering configuration
+#####################################################################
+
+# Matrix Covariance type ['diagonal', 'full', 'tied', 'tied_diagonal', 'spherical']
+clust_covar_type = 'diagonal'
+
+# Maximum number of components of cluster
+clust_max_components = 300
+
+# Slices
+clust_slices = 8
+
+# Batch size
+clust_batch_size = 100
