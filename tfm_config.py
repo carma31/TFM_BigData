@@ -78,6 +78,9 @@ perCustomerClustFileName = 'perCustomer'
 # Customer Clusters File Name
 clustersPerCustomerClustFileName = 'clustersPerCustomer'
 
+# Statistic Per Clusters File Name
+clustersStatisticsFileName = 'clustersStatistics'
+
 #####################################################################
 # Aux variables configuration
 #####################################################################
