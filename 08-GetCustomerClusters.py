@@ -67,13 +67,13 @@ for modelEval in mEvaluations:
 	customerData = dataTuple.reduceByKey(lambda a, b: tuple([a[x] + b[x] for x in xrange(nClusters)]))
 	
 	# Transform tuples in CSV lines
-	customerDataCSV = customerData.map(toCSVLine)
+	#customerDataCSV = customerData.map(toCSVLine)
 	
 	# Get data
-	res = customerDataCSV.collect()
+	#res = customerDataCSV.collect()
 
 	# Write result data 
-	writeCSV(absoluteClusteringStatisticsDir + '/' +  perCustomerClustFileName + '-100-' + modelEval, res)
+	#writeCSV(absoluteClusteringStatisticsDir + '/' +  perCustomerClustFileName + '-100-' + modelEval, res)
 	
 
 	# Get customers clusters
@@ -92,9 +92,19 @@ for modelEval in mEvaluations:
 
 
 	# Normalize cluster occurriencies
-	#auxRdd = customerData.map(lambda row: (row[0], row[1], sum(row[1])))
-	#normalizedRdd = auxRdd.map(lambda row: (row[0], [i/row[2] for i in row[1]]))
+	auxRdd = customerData.map(lambda row: (row[0], row[1], sum(row[1])))
+	normalizedData = auxRdd.map(lambda row: (row[0], [float(i)/row[2] for i in row[1]]))
+
+	# Transform tuples in CSV lines
+	normalizedDataCSV = normalizedData.map(toCSVLine)
 	
+	# Get data
+	res = normalizedDataCSV.collect()
+
+	# Write result data
+	writeCSV(absoluteClusteringStatisticsDir + '/' + perCustomerClustFileName + '-100-' + modelEval, res)
+
+ 	
 	# Zip cluster and ocurrencies data
 	zippedCustClusterData = customerClustersData.map(lambda row: (row[0], zip(row[1], row[2]), sorted(row[2], key=lambda x: -x), sum(row[2])))
 	
@@ -110,12 +120,26 @@ for modelEval in mEvaluations:
 		# Get significant data
 		indexAuxClusterData = auxClusterData.map(lambda row: (row[0], row[1], \
 			[1 if row[4][j] < row[3] else 0 for j in xrange(len(row[4]))].index(0)+1))
-		signicantClusterData = indexAuxClusterData.map(lambda row: (row[0], row[1][:row[2]]))
+		signicantClusterData = indexAuxClusterData.map(lambda row: (row[0], row[1][:row[2]], row[1]))
 		
 		# Covert to List
 		listSignificantClusterData = signicantClusterData.map(lambda row: (row[0], [row[1][j][0] for j in xrange(len(row[1]))],\
 			[row[1][j][1] for j in xrange(len(row[1]))]))
+
+		# Normalize Data
+		auxRDD = signicantClusterData.map(lambda row: (row[0], [j[1] if j in row[1] else 0 for j in sorted(row[2], key=lambda x: x[0])]))
+		auxRDD = auxRDD.map(lambda row: (row[0], row[1], sum(row[1])))
+		normalizedData = auxRDD.map(lambda row: (row[0], [float(j)/row[2] for j in row[1]]))
 		
+		# Transform tuples in CSV lines
+		normalizedDataCSV = normalizedData.map(toCSVLine)
+	
+		# Get data
+		res = normalizedDataCSV.collect()
+
+		# Write result data
+		writeCSV(absoluteClusteringStatisticsDir + '/' + perCustomerClustFileName + '-' + str(i).zfill(3) +'-' + modelEval, res)
+
 
 		# Transform tuples in CSV lines
 		listSignificantClusterDataCSV = listSignificantClusterData.map(toCSVLine)
@@ -165,4 +189,4 @@ for modelEval in mEvaluations:
 # Get current time to monitorize execution time
 executionEndTime = time.time()
 if verbose:
-		print getExecutionTimeMsg(executionStartTime, executionEndTime)
+	print getExecutionTimeMsg(executionStartTime, executionEndTime)
