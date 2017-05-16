@@ -72,6 +72,11 @@ clusteringClassResDir = "ClusteringClassifications"
 # Clustering Classification Results Directory Absolute Path
 absoluteClusteringClassResDir = baseDir + "/" + clusteringClassResDir
 
+# Clustering Statistics Dir
+clusteringStatisticsDir = 'ClusteringStatistics'
+# Clustering Statistics Dir Absolute Path
+absoluteClusteringStatisticsDir = absoluteDataDir + "/" + clusteringStatisticsDir
+
 # Customer Clusters Ocurrences File Name
 perCustomerClustFileName = 'perCustomer'
 

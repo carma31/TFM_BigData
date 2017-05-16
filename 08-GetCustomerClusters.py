@@ -32,6 +32,13 @@ executionStartTime = time.time()
 # Spark Context Inizalization
 sc = SparkContext()
 
+
+# Results Directory Creation
+createDirectoryIfNotExists(absoluteClusteringStatisticsDir)
+
+# Delete previus executions data
+deleteDirectoryData(absoluteClusteringStatisticsDir)
+
 # Get all models evalutions
 mEvaluations = sorted(getFilesInDir(absoluteClusteringClassResDir))
 
@@ -66,7 +73,8 @@ for modelEval in mEvaluations:
 	res = customerDataCSV.collect()
 
 	# Write result data 
-	writeCSV(absoluteClusteringClassResDir + '/' +  perCustomerClustFileName + '-' + modelEval, res)
+	writeCSV(absoluteClusteringStatisticsDir + '/' +  perCustomerClustFileName + '-100-' + modelEval, res)
+	
 
 	# Get customers clusters
 	customerClustersData = customerData.map(lambda row: (row[0], filter(partial(is_not, None), [i if row[1][i] != 0 else None for i in xrange(nClusters)]),\
@@ -80,7 +88,59 @@ for modelEval in mEvaluations:
 	res = customerClusterDataCSV.collect()
 
 	# Write result data
-	writeCSV(absoluteClusteringClassResDir + '/' + clustersPerCustomerClustFileName +'-' + modelEval, res)
+	writeCSV(absoluteClusteringStatisticsDir + '/' + clustersPerCustomerClustFileName + '-100-' + modelEval, res)
+
+
+	# Normalize cluster occurriencies
+	#auxRdd = customerData.map(lambda row: (row[0], row[1], sum(row[1])))
+	#normalizedRdd = auxRdd.map(lambda row: (row[0], [i/row[2] for i in row[1]]))
+	
+	# Zip cluster and ocurrencies data
+	zippedCustClusterData = customerClustersData.map(lambda row: (row[0], zip(row[1], row[2]), sorted(row[2], key=lambda x: -x), sum(row[2])))
+	
+	# Sort cluster occurrencies
+	orderedZippedCustClusterData = zippedCustClusterData.map(lambda row: (row[0], sorted(row[1], key = lambda x: -x[1]), row[2], row[3]))
+
+	# Get significant clusters with i% amount of data
+	for i in xrange(5, 100, 5):
+		# Get accumulate list
+		auxClusterData = orderedZippedCustClusterData.map(lambda row: (row[0], row[1], row[3], ((row[3] * i)/100),\
+			[sum(row[2][0:(j+1)]) for j in xrange(len(row[2]))]))
+
+		# Get significant data
+		indexAuxClusterData = auxClusterData.map(lambda row: (row[0], row[1], \
+			[1 if row[4][j] < row[3] else 0 for j in xrange(len(row[4]))].index(0)+1))
+		signicantClusterData = indexAuxClusterData.map(lambda row: (row[0], row[1][:row[2]]))
+		
+		# Covert to List
+		listSignificantClusterData = signicantClusterData.map(lambda row: (row[0], [row[1][j][0] for j in xrange(len(row[1]))],\
+			[row[1][j][1] for j in xrange(len(row[1]))]))
+		
+
+		# Transform tuples in CSV lines
+		listSignificantClusterDataCSV = listSignificantClusterData.map(toCSVLine)
+
+		# Get data
+		res = listSignificantClusterDataCSV.collect()
+
+		# Write result data
+		writeCSV(absoluteClusteringStatisticsDir + '/' + clustersPerCustomerClustFileName + '-' + str(i).zfill(3) + '-' + modelEval, res)
+		
+		# Add counter to customer samples with clusters with key
+		groupCont = listSignificantClusterData.map(lambda row: (str(sorted(row[1])), 1))
+	
+		# Count occurriencies of group of clusters
+		numGroups = groupCont.reduceByKey(lambda a, b: a + b)
+
+		# Transform result in CSV lines	
+		numGroupsCSV = numGroups.map(toCSVLine)
+
+		# Get data
+		res = numGroupsCSV.collect()
+
+		# Wirte result data
+		writeCSV(absoluteClusteringStatisticsDir + '/' + clustersStatisticsFileName + '-' + str(i).zfill(3) + '-' + modelEval, res)
+
 
 	# Add counter to customer samples with clusters with key
 	groupCont = customerClustersData.map(lambda row: (str(row[1]), 1))
@@ -95,7 +155,7 @@ for modelEval in mEvaluations:
 	res = numGroupsCSV.collect()
 
 	# Wirte result data
-	writeCSV(absoluteClusteringClassResDir + '/' + clustersStatisticsFileName +'-' + modelEval, res)
+	writeCSV(absoluteClusteringStatisticsDir + '/' + clustersStatisticsFileName + '-100-' + modelEval, res)
 
 	# Get current time to monitorize parse model evaluation time
 	modelEvalEndTime = time.time()
