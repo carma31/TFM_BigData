@@ -86,6 +86,24 @@ clustersPerCustomerClustFileName = 'clustersPerCustomer'
 # Statistic Per Clusters File Name
 clustersStatisticsFileName = 'clustersStatistics'
 
+
+# ReClustering Directory Name
+reclusteringDir = 'ReClusteringData'
+# ReClustering Directory Name Absolute Path
+absoluteReclusteringDir = absoluteDataDir + "/" + reclusteringDir
+
+
+# ReClustering Logs Directory
+reclusteringLogDirName = "ReClustering/ReClusteringLog"
+# Clustering Logs Directory Absolute Path
+absoluteReclusteringLogDirName = baseDir + "/" + reclusteringLogDirName
+
+# Clustering Models Directory
+reclusteringModelsDirName = "ReClustering/ReClusteringModels"
+# Clustering Models Directory Absolute Path
+absoluteReclusteringModelsDirName = baseDir + "/" + reclusteringModelsDirName
+
+
 #####################################################################
 # Aux variables configuration
 #####################################################################
@@ -103,6 +121,8 @@ deleteDataPrevExec = True
 TFM_appName = "TFM"
 
 
+normalizationPrecision = 4
+
 #####################################################################
 # Clustering configuration
 #####################################################################
@@ -118,3 +138,21 @@ clust_slices = 8
 
 # Batch size
 clust_batch_size = 100
+
+
+#####################################################################
+# ReClustering configuration
+#####################################################################
+
+
+reclust_covar_types = [('diagonal', 'd'), ('full', 'f')]
+
+# Maximum number of components of cluster
+reclust_max_components = 150
+
+# Slices
+reclust_slices = 8
+
+# Batch size
+reclust_batch_size = 100
+
