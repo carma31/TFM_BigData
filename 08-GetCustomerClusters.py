@@ -106,7 +106,7 @@ for modelEval in mEvaluations:
 
  	
 	# Zip cluster and ocurrencies data
-	zippedCustClusterData = customerClustersData.map(lambda row: (row[0], zip(row[1], row[2]), sorted(row[2], key=lambda x: -x), sum(row[2])))
+	zippedCustClusterData = customerData.map(lambda row: (row[0], [(i, row[1][i]) for i in xrange(len(row[1]))], sorted(row[1], key=lambda x: -x), sum(row[1])))
 	
 	# Sort cluster occurrencies
 	orderedZippedCustClusterData = zippedCustClusterData.map(lambda row: (row[0], sorted(row[1], key = lambda x: -x[1]), row[2], row[3]))
