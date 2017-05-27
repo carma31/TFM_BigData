@@ -1,4 +1,20 @@
 #!/bin/bash
+# ------------------------------------------------------------------- #
+#                                                                     #
+#	MASTER EN BIG DATA ANALYTICS                                      #
+#                                                                     #
+#	TRABAJO FINAL DE MASTER                                           #
+#                                                                     #
+#                                                                     #
+#	- CARLOS MARTINEZ GOMEZ                                           #
+#	- ENRIQUE CASTELLO FERRE                                          #
+#                                                                     #
+# ------------------------------------------------------------------- #
+
+# ....................................................................
+# Script to plot BIC Evolution Chart
+# ....................................................................
+
 
 # Load project utils 
 source ./tfm_utils.sh
