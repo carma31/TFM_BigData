@@ -71,7 +71,7 @@ for model in models:
 			# Get Customer Id
 			customer = sample[0]
 			# Create numpy array with sample data
-			sample = numpy.array([float(x) for x in sample[1:]])
+			sample = numpy.array([float(x) for x in sample[5:]])
 			# Classify sample
 			res = mle.gmm.classify(sample)
 			# Write result in result file
