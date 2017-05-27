@@ -54,8 +54,13 @@ absoluteClusterDataset = absoluteDataDir + "/" + clusterDataset
 
 # CustomerClusterDatasetName
 customerClusterDataset = "CustomerDayReadings.csv"
-# Cluster Dataset Name Absolute Path
+# Customer Cluster Dataset Name Absolute Path
 absoluteCustomerClusterDataset = absoluteDataDir + "/" + customerClusterDataset
+
+# FullClusterDatasetName
+fullClusterDataset = "FullDayReadings.csv"
+# Full Cluster Dataset Name Absolute Path
+absoluteFullClusterDataset = absoluteDataDir + "/" + fullClusterDataset
 
 # Generic Results Directory
 resultsDir = "Results"

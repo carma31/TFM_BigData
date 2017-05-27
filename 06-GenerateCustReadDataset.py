@@ -59,6 +59,7 @@ for custFile in customerFiles:
 	# Parse rows to get DayReadingData
 	customerDayReading = customerData.map(parseDayReadingData)
 
+	"""
 	# Get Day readings
 	dayReading = customerDayReading.map(lambda c: [c.CUSTOMER_ID, c.READING_00, c.READING_01, c.READING_02,\
 		c.READING_03, c.READING_04, c.READING_05, c.READING_06, c.READING_07, c.READING_08, c.READING_09, c.READING_10,\
@@ -68,18 +69,22 @@ for custFile in customerFiles:
 
 	# Transform tuples in CSV lines
 	CSVCustomerDayReading = dayReading.map(toCSVLine)
+	"""
+
+	# Transform tuples in CSV lines
+	CSVCustomerDayReading = customerDayReading.map(toCSVLine)
 
 	# Get all file data
 	data = CSVCustomerDayReading.collect()
 
 	# Write result file data and get lines number
-	linesCount = writeCSV(absoluteCustomerClusterDataset, data, "a")
+	linesCount = writeCSV(absoluteFullClusterDataset, data, "a")
 
 	# Upadete lines counter
 	totalLinesCount += linesCount
 
 	if verbose:
-		print getCurrentDateTimeString() + " - Writed " + str(linesCount) + " in " + clusterDataset
+		print getCurrentDateTimeString() + " - Writed " + str(linesCount) + " in " + fullClusterDataset
 		print getCurrentDateTimeString() + " - " + custFile + " parsed successfully"
 
 	# Get current time to monitorize parse file execution time
