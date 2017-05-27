@@ -38,27 +38,38 @@ createDirectoryIfNotExists(absoluteReclusteringDir)
 # Delete previus executions data
 deleteDirectoryData(absoluteReclusteringDir)
 
- 
+# Get Datasets to reclustering process
 normalizedDatasets = sorted(getFilesInDir(absoluteClusteringStatisticsDir))
 
+# Generate dataset per model for reclustering process
 for f in normalizedDatasets:
+
 	if "perCustomer-" in f:
+		# Skip initial models with 1 component
 		if "-0001" in f:
 			continue
 
+		# Read model evaluation samples
 		rawData = spark_context.textFile(absoluteClusteringStatisticsDir + "/" + f)
+		# Remove brakets
 		removeBraket = rawData.map(lambda row: row.replace("[", "").replace("]", ""))
+		# Split rows
 		parsedData = removeBraket.map(lambda row: row.split(csvDelimiter)) 
+		# Round components
 		removeCust = parsedData.map(lambda row: tuple([round(float(row[i]), normalizationPrecision) for i in xrange(1, len(row))]))
 
+		# Convert to CSV Lines
 		reclusteringDataCSV = removeCust.map(toCSVLine)
 
+		# Get result data
 		res = reclusteringDataCSV.collect()
 
+		# Generate result file name
 		percentageSigIdx = f.index("-") + 1
 		compNumIdx = f.index(".")
 		auxFileName = f[percentageSigIdx:compNumIdx]
 
+		# Write CSV result
 		writeCSV(absoluteReclusteringDir + '/' + auxFileName, res)
 
 		if verbose:
@@ -68,7 +79,7 @@ for f in normalizedDatasets:
 # Get training data
 trainingFiles = sorted(getFilesInDir(absoluteReclusteringDir))
 
-
+# For each file fit an other GMM model
 for trainingFile in trainingFiles:
 
 	# Get current time to parsing file
@@ -90,6 +101,7 @@ for trainingFile in trainingFiles:
 		- All the values **must** be numeric, integers or real values.
 	"""
 
+	# Load dataset
 	text_lines = spark_context.textFile(absoluteReclusteringDir + "/" + trainingFile)
 
 
@@ -181,8 +193,10 @@ for trainingFile in trainingFiles:
 	dim_x = samples.first().shape[1]
 
 	for cType in reclust_covar_types:
+		# Get Covariance matrix type
 		covarType = cType[0]
  
+		# Get model name to generate results
 		auxLogDirName = absoluteReclusteringLogDirName + "-" + trainingFile + "-" + cType[1]
 		auxModelsDirName = absoluteReclusteringModelsDirName + "-" + trainingFile + "-" + cType[1]
 
