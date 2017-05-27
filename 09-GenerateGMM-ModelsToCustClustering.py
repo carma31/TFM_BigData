@@ -31,25 +31,21 @@ from pyspark import SparkContext
 executionStartTime = time.time()
 
 
-# Spark Context Inizalization
-spark_context = SparkContext(appName = TFM_appName)
-
-
 # Results Directory Creation
 createDirectoryIfNotExists(absoluteReclusteringDir)
+
 
 # Delete previus executions data
 deleteDirectoryData(absoluteReclusteringDir)
 
-
-# coger fichero
-# quedarnos solo con los perCustomer
-#quitar el id customer y los corchetes y redondear a 4 digitos 
+ 
 normalizedDatasets = sorted(getFilesInDir(absoluteClusteringStatisticsDir))
-
 
 for f in normalizedDatasets:
 	if "perCustomer-" in f:
+		if "-0001" in f:
+			continue
+
 		rawData = spark_context.textFile(absoluteClusteringStatisticsDir + "/" + f)
 		removeBraket = rawData.map(lambda row: row.replace("[", "").replace("]", ""))
 		parsedData = removeBraket.map(lambda row: row.split(csvDelimiter)) 
@@ -72,10 +68,14 @@ for f in normalizedDatasets:
 # Get training data
 trainingFiles = sorted(getFilesInDir(absoluteReclusteringDir))
 
+
 for trainingFile in trainingFiles:
 
 	# Get current time to parsing file
 	parsingStartTime = time.time()
+
+	# Spark Context Inizalization
+	spark_context = SparkContext(appName = TFM_appName)
 
 	if verbose:
 		print getCurrentDateTimeString() + " - Parsing file " + trainingFile
@@ -121,12 +121,13 @@ for trainingFile in trainingFiles:
 	K = ((K//reclust_slices) + 1) * reclust_slices
 	samples = text_lines.map(lambda line: (numpy.random.randint(K), numpy.array([float(x) for x in line.split(csvDelimiter)])))
 
-
+	"""
 	# Shows an example of each element in the temporary RDD of tuples [key, sample]
 	if verbose:
 		print getCurrentDateTimeString() + " - Example of element in the temporay RDD of tuples [key, sample]"
 		print("	" + str(samples.first()))
 		print("	" + str(type(samples.first())))
+	"""
 
 
 	"""
@@ -136,9 +137,12 @@ for trainingFile in trainingFiles:
 	"""
 	samples = samples.reduceByKey(lambda x, y: numpy.vstack([x, y]))
 
+
 	# Repartition if necessary
 	if samples.getNumPartitions() < reclust_slices:
 		samples = samples.repartition(reclust_slices)
+
+	"""
 		if verbose:
 			print getCurrentDateTimeString() + " - rdd repartitioned to " + str(samples.getNumPartitions()) + " partitions"
 
@@ -147,25 +151,32 @@ for trainingFile in trainingFiles:
 		print getCurrentDateTimeString() + " - Example of element in the temporay RDD of tuples [key, block of sample]"
 		print("	" + str(samples.first()))
 		print("	" + str(type(samples.first())))
+	"""
 
 	"""
 		Convert the RDD of tuples to the definitive RDD of blocks of samples
 	"""
 	samples = samples.map(lambda x: x[1])
 
+	"""
 	# Shows an example of each element in the temporary RDD of blocks of samples
 	if verbose:
 		print getCurrentDateTimeString() + " - Example of element in the temporay RDD of blocks of samples"
 		print("	" + str(samples.first()))
 		print("	" + str(type(samples.first())))
+	
+	"""
 
 	samples.persist()
 	
+	"""
 	if verbose:
 		print getCurrentDateTimeString() + " - we are working with " + str(samples.count()) + " blocks of approximately " + str(reclust_batch_size) + " samples"
 		# Shows an example of shape of the elements in the temporary RDD of blocks of samples
 		print getCurrentDateTimeString() + " - " + str(samples.first().shape)
-	
+	"""
+
+
 	# Gets the dimensionality of samples in order to create the object of the class MLE.
 	dim_x = samples.first().shape[1]
 
@@ -189,9 +200,13 @@ for trainingFile in trainingFiles:
 
 		# Create MLE class
 		mle = machine_learning.MLE(covar_type = covarType, dim = dim_x, log_dir = auxLogDirName, models_dir = auxModelsDirName)
-
-		# Fit clusters
-		mle.fit_with_spark(spark_context = spark_context, samples = samples, max_components = reclust_max_components )
+	
+		try:
+			# Fit clusters
+			mle.fit_with_spark(spark_context = spark_context, samples = samples, max_components = reclust_max_components )
+		
+		except Exception:
+			print getCurrentDateTimeString() + " - An exception has been thrown"
 
 	samples.unpersist()
 	spark_context.stop()
