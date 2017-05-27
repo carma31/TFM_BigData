@@ -57,25 +57,29 @@ customerClusterDataset = "CustomerDayReadings.csv"
 # Cluster Dataset Name Absolute Path
 absoluteCustomerClusterDataset = absoluteDataDir + "/" + customerClusterDataset
 
+# Generic Results Directory
+resultsDir = "Results"
+absoluteResultsDir = baseDir + "/" + resultsDir
+
 # Clustering Logs Directory
 clusteringLogDirName = "ClusteringLog"
 # Clustering Logs Directory Absolute Path
-absoluteclusteringLogDir = baseDir + "/" + clusteringLogDirName
+absoluteclusteringLogDir = absoluteResultsDir + "/" + clusteringLogDirName
 
 # Clustering Models Directory
 clusteringModelsDirName = "ClusteringModels"
 # Clustering Models Directory Absolute Path
-absoluteClusteringModelsDirName = baseDir + "/" + clusteringModelsDirName
+absoluteClusteringModelsDirName = absoluteResultsDir + "/" + clusteringModelsDirName
 
 # Clustering Classification Results Directory
 clusteringClassResDir = "ClusteringClassifications"
 # Clustering Classification Results Directory Absolute Path
-absoluteClusteringClassResDir = baseDir + "/" + clusteringClassResDir
+absoluteClusteringClassResDir = absoluteResultsDir + "/" + clusteringClassResDir
 
 # Clustering Statistics Dir
 clusteringStatisticsDir = 'ClusteringStatistics'
 # Clustering Statistics Dir Absolute Path
-absoluteClusteringStatisticsDir = absoluteDataDir + "/" + clusteringStatisticsDir
+absoluteClusteringStatisticsDir = absoluteResultsDir + "/" + clusteringStatisticsDir
 
 # Customer Clusters Ocurrences File Name
 perCustomerClustFileName = 'perCustomer'
@@ -96,12 +100,12 @@ absoluteReclusteringDir = absoluteDataDir + "/" + reclusteringDir
 # ReClustering Logs Directory
 reclusteringLogDirName = "ReClustering/ReClusteringLog"
 # Clustering Logs Directory Absolute Path
-absoluteReclusteringLogDirName = baseDir + "/" + reclusteringLogDirName
+absoluteReclusteringLogDirName = absoluteResultsDir + "/" + reclusteringLogDirName
 
 # Clustering Models Directory
 reclusteringModelsDirName = "ReClustering/ReClusteringModels"
 # Clustering Models Directory Absolute Path
-absoluteReclusteringModelsDirName = baseDir + "/" + reclusteringModelsDirName
+absoluteReclusteringModelsDirName = absoluteResultsDir + "/" + reclusteringModelsDirName
 
 
 #####################################################################
