@@ -23,10 +23,10 @@
 baseDir="/home/kike/Escritorio/TFM"
 
 # Data Directory
-dataDir="/Data"
+dataDir="Data"
 
 # Data Directory With Absolute Path
-absoluteDataDir="${baseDir}${dataDir}"
+absoluteDataDir="${baseDir}/${dataDir}"
 
 # Raw Dataset Filename
 rawDatasetFilename="CD_INTERVAL_READING_ALL_NO_QUOTES.csv"
@@ -34,9 +34,15 @@ rawDatasetFilename="CD_INTERVAL_READING_ALL_NO_QUOTES.csv"
 absoluteRawDatasetFilename="${absoluteDataDir}/${rawDatasetFilename}"
 
 # Data Directory with Splited Raw Dataset
-splitDir="/Splited"
+splitDir="Splited"
 # Data Directory With Splited Raw Dataset With Absolute Path
-absoluteSplitDir="${absoluteDataDir}${splitDir}"
+absoluteSplitDir="${absoluteDataDir}/${splitDir}"
+
+
+# Results Directory
+resultsDirectory="Results"
+# Results Directory with Absolute Path
+absoluteResultsDirectory="${baseDir}/${resultsDirectory}"
 
 
 #####################################################################
