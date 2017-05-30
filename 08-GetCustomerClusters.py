@@ -44,7 +44,11 @@ mEvaluations = sorted(getFilesInDir(absoluteClusteringClassResDir))
 
 # For each model evaluation reduce by Customer Id to get all Clusters of customer
 for modelEval in mEvaluations:
-	
+
+	# Skip initial model with only one component
+	if "0001" in modelEval:
+		continue
+
 	# Get current time to monitorize parse model evaluation time
 	modelEvalStartTime = time.time()
 
@@ -65,18 +69,8 @@ for modelEval in mEvaluations:
 	
 	# Reduce data per CUSTOMER_ID
 	customerData = dataTuple.reduceByKey(lambda a, b: tuple([a[x] + b[x] for x in xrange(nClusters)]))
-	
-	# Transform tuples in CSV lines
-	#customerDataCSV = customerData.map(toCSVLine)
-	
-	# Get data
-	#res = customerDataCSV.collect()
 
-	# Write result data 
-	#writeCSV(absoluteClusteringStatisticsDir + '/' +  perCustomerClustFileName + '-100-' + modelEval, res)
-	
-
-	# Get customers clusters
+	# Get customers clusters (CUSTOMER_ID, LIST_OF_COMPONENTS, LIST_OF_OCCURRENCES_IN_COMPONENT)
 	customerClustersData = customerData.map(lambda row: (row[0], filter(partial(is_not, None), [i if row[1][i] != 0 else None for i in xrange(nClusters)]),\
 		filter(None, [row[1][i] if row[1][i] != 0 else None for i in xrange(nClusters)])\
 	))
@@ -92,8 +86,9 @@ for modelEval in mEvaluations:
 
 
 	# Normalize cluster occurriencies
-	auxRdd = customerData.map(lambda row: (row[0], row[1], sum(row[1])))
-	normalizedData = auxRdd.map(lambda row: (row[0], [float(i)/row[2] for i in row[1]]))
+	auxRdd = customerData.map(lambda row: parseFullOccurrencesDataTotal([row[0], row[1], sum(row[1])]))
+	# Tuple with CUSTOMER_ID and NORMALIZED_OCCURRENCES_LIST
+	normalizedData = auxRdd.map(lambda r: (r.CUSTOMER_ID, [float(compOccurrences)/r.TOTAL_SAMPLES for compOccurrences in r.OCCURRENCES_LIST]))
 
 	# Transform tuples in CSV lines
 	normalizedDataCSV = normalizedData.map(toCSVLine)
@@ -106,23 +101,27 @@ for modelEval in mEvaluations:
 
  	
 	# Zip cluster and ocurrencies data
-	zippedCustClusterData = customerData.map(lambda row: (row[0], [(i, row[1][i]) for i in xrange(len(row[1]))], sorted(row[1], key=lambda x: -x), sum(row[1])))
+	zippedCustClusterData = customerData.map(lambda row: parseAuxNormalizationData([row[0],\
+		[(i, row[1][i]) for i in xrange(len(row[1]))], sorted(row[1], key=lambda x: -x), sum(row[1])]))
 	
 	# Sort cluster occurrencies
-	orderedZippedCustClusterData = zippedCustClusterData.map(lambda row: (row[0], sorted(row[1], key = lambda x: -x[1]), row[2], row[3]))
+	orderedZippedCustClusterData = zippedCustClusterData.map(lambda r: parseAuxNormalizationData([r.CUSTOMER_ID,\
+		sorted(r.COMPONENT_OCCURRENCIES_TUPLE_LIST, key = lambda x: -x[1]), r.DESC_ORDERED_OCCURRENCES_LIST, r.TOTAL_SAMPLES]))
 
 	# Get significant clusters with i% amount of data
 	for i in xrange(5, 100, 5):
 		# Get accumulate list
-		auxClusterData = orderedZippedCustClusterData.map(lambda row: (row[0], row[1], row[3], ((row[3] * i)/100),\
-			[sum(row[2][0:(j+1)]) for j in xrange(len(row[2]))]))
+		auxClusterData = orderedZippedCustClusterData.map(lambda r: (r.CUSTOMER_ID, r.COMPONENT_OCCURRENCIES_TUPLE_LIST, r.TOTAL_SAMPLES,\
+			((r.TOTAL_SAMPLES * i)/100), [sum(r.DESC_ORDERED_OCCURRENCES_LIST[0:(j+1)]) for j in xrange(len(r.DESC_ORDERED_OCCURRENCES_LIST))]))
 
 		# Get significant data
-		indexAuxClusterData = auxClusterData.map(lambda row: (row[0], row[1], \
-			[1 if row[4][j] < row[3] else 0 for j in xrange(len(row[4]))].index(0)+1))
+		# Tuple with (CUSTOMER_ID, DESC_ORD_COMPONENT_OCCURRENCIES_TUPLE_LIST, LAST_SIGNIFICANT_COMP_INDEX)
+		indexAuxClusterData = auxClusterData.map(lambda row: (row[0], row[1],\
+			getLastSignificantComponentIdx(row[4], row[3])))
+		# Tuple with (CUSTOMER_ID, SIGNIFICANT_COMPONENT_OCCURRENCES_TUPLE_LIST, DESC_ORD_COMPONENT_OCCURRENCIES_TUPLE_LIST)
 		signicantClusterData = indexAuxClusterData.map(lambda row: (row[0], row[1][:row[2]], row[1]))
 		
-		# Covert to List
+		# Convert to List
 		listSignificantClusterData = signicantClusterData.map(lambda row: (row[0], [row[1][j][0] for j in xrange(len(row[1]))],\
 			[row[1][j][1] for j in xrange(len(row[1]))]))
 
