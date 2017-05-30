@@ -58,6 +58,16 @@ dayReadingDataFields = ['CUSTOMER_ID', 'READING_YEAR', 'READING_MONTH', 'READING
 DayReadingData = namedtuple('DayReading', dayReadingDataFields)
 
 
+# Full Occurrences Data With Total Fields
+fullOccurrencesDataTotalFields = ['CUSTOMER_ID', 'OCCURRENCES_LIST', 'TOTAL_SAMPLES']
+# Named Tuple for Full Occurrences Data With Total Fields
+FullOccurrencesDataTotal = namedtuple('FullOccurrencesDataTotal', fullOccurrencesDataTotalFields)
+
+# Aux Normalization Data Fields
+auxNormalizationDataFields = ['CUSTOMER_ID', 'COMPONENT_OCCURRENCIES_TUPLE_LIST', 'DESC_ORDERED_OCCURRENCES_LIST', 'TOTAL_SAMPLES']
+# Named Tuple for Aux Normalization Data Fields
+AuxNormalizationData = namedtuple('AuxNormalizationData', auxNormalizationDataFields)
+
 #####################################################################
 # Aux functions definition
 #####################################################################
@@ -344,4 +354,26 @@ def getLastSignificantComponentIdx(descOrdAccumComponentsList, significantSample
 			idx = i + 1
 		
 	return idx
+
+
+# Parse Full Occurrences Data With Total
+# Params:
+#	* fieldList	- List - List of CUSTOMER_ID, OCCURRENCES_LIST and TOTAL_SAMPLES
+# Return:
+#	* namedtuple	- FullOccurrencesDataTotal named tuple
+def parseFullOccurrencesDataTotal(fieldsList):
+	res = fieldsList
+	res += [None] * (len(fullOccurrencesDataTotalFields) - len(res))
+	return FullOccurrencesDataTotal(*res)
+
+
+# Parse Aux Normalization Data
+# Params:
+#	* fieldList	- List - List of CUSTOMER_ID, COMPONENT_OCCURRENCIES_TUPLE_LIST, DESC_ORDERED_OCCURRENCES_LIST and TOTAL_SAMPLES
+# Return:
+#	* namedtuple	- AuxNormalizationData named tuple
+def parseAuxNormalizationData(fieldsList):
+	res = fieldsList
+	res += [None] * (len(auxNormalizationDataFields) - len(res))
+	return AuxNormalizationData(*res)
 
