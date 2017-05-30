@@ -129,8 +129,11 @@ deleteDataPrevExec = True
 #Spark App Name
 TFM_appName = "TFM"
 
-
+# Normalization Decimal Precision
 normalizationPrecision = 4
+
+# Significance Aceptance Percentage
+pctSignificanceAcceptance = 0.05 
 
 #####################################################################
 # Clustering configuration

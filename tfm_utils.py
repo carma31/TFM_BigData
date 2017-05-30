@@ -313,3 +313,35 @@ def parseReading(reading):
 def getDayOfWeek(year, month, day):
 	return (datetime.datetime(year = year, month = month, day = day).weekday() + 1)
 
+
+
+# Function to get index of significant component index on desc ordered components list7
+# Params:
+#	* descOrdAccumComponentsList	- Int List	- Accumulated Components Occurrences Desc Ordered List
+#   * significantSample				- Int	- Num of significant samples to be considered
+# Return:
+#	* Integer						- Index of last significant component  
+def getLastSignificantComponentIdx(descOrdAccumComponentsList, significantSamples):
+	idx = 0
+	aux = [1 if componentOccurrences < significantSamples else 0 for componentOccurrences in descOrdAccumComponentsList]
+	
+	if len(descOrdAccumComponentsList) > 0:
+		desaccumList = [descOrdAccumComponentsList[0]] + [descOrdAccumComponentsList[i] - descOrdAccumComponentsList[i - 1] for i in xrange(1, len(descOrdAccumComponentsList))]
+	else:
+		desaccumList = []
+	
+	if 0 in aux:
+		idx = aux.index(0) + 1
+	else:
+		idx = len(descOrdAccumComponentsList)	
+
+	
+	for i in xrange(idx, len(aux)):
+		minBound = desaccumList[idx - 1] - (desaccumList[idx - 1] * pctSignificanceAcceptance)
+		maxBound = desaccumList[idx - 1] + (desaccumList[idx - 1] * pctSignificanceAcceptance)
+		
+		if desaccumList[i] >= minBound and desaccumList[i] <= maxBound:
+			idx = i + 1
+		
+	return idx
+
