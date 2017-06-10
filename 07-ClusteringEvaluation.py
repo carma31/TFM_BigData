@@ -24,19 +24,11 @@ import machine_learning
 # Load project utils script
 from tfm_utils import *
 
-
-# Import Python Spark Context
-from pyspark import SparkContext
-
-
 # Get current time to monitorize execution time
 executionStartTime = time.time()
 
-# Spark Context Inizalization
-spark_context = SparkContext(appName = TFM_appName)
-
 # Initialize MLE Class
-mle = machine_learning.MLE(covar_type = clust_covar_type, dim = 1, log_dir = absoluteclusteringLogDir, models_dir = absoluteClusteringModelsDirName)
+gmm = machine_learning.GMM()
 
 # Results Directory Creation
 createDirectoryIfNotExists(absoluteClusteringClassResDir)
@@ -57,12 +49,12 @@ for model in models:
 		executionModelStartTime = time.time()
 
 		# Load generated model from text file
-		mle.gmm.load_from_text(absoluteClusteringModelsDirName + "/" + model)
+		gmm.load_from_text(absoluteClusteringModelsDirName + "/" + model)
 
 		# Get sample components
-		n_components = mle.gmm.n_components
+		n_components = gmm.n_components
 
-		dataset = open(absoluteCustomerClusterDataset, "r")
+		dataset = open(absoluteFullClusterDataset, "r")
 		result = open(absoluteClusteringClassResDir + "/" + str(n_components).zfill(4) + ".csv", "w")
 
 		# For each sample classify on model		
@@ -73,7 +65,7 @@ for model in models:
 			# Create numpy array with sample data
 			sample = numpy.array([float(x) for x in sample[5:]])
 			# Classify sample
-			res = mle.gmm.classify(sample)
+			res = gmm.classify(sample)
 			# Write result in result file
 			result.write(toCSVLine([customer, str(res)]) + "\n")
 		
