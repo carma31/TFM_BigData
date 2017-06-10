@@ -76,6 +76,16 @@ clusteringModelsDirName = "ClusteringModels"
 # Clustering Models Directory Absolute Path
 absoluteClusteringModelsDirName = absoluteResultsDir + "/" + clusteringModelsDirName
 
+# Clustering Full Cover Matrix Type Logs Directory
+clusteringFullLogDirName = "ClusteringFullLog"
+# Clustering Logs Directory Absolute Path
+absoluteclusteringFullLogDir = absoluteResultsDir + "/" + clusteringFullLogDirName
+
+# Clustering Models Directory
+clusteringFullModelsDirName = "ClusteringFullModels"
+# Clustering Models Directory Absolute Path
+absoluteClusteringFullModelsDirName = absoluteResultsDir + "/" + clusteringFullModelsDirName
+
 # Clustering Classification Results Directory
 clusteringClassResDir = "ClusteringClassifications"
 # Clustering Classification Results Directory Absolute Path
@@ -150,6 +160,22 @@ clust_slices = 8
 
 # Batch size
 clust_batch_size = 100
+
+#####################################################################
+# Clustering Full configuration
+#####################################################################
+
+# Matrix Covariance type ['diagonal', 'full', 'tied', 'tied_diagonal', 'spherical']
+clustFullCovarType = 'full'
+
+# Maximum number of components of cluster
+clustFullMaxComponents = 100
+
+# Slices
+clustFullSlices = 8
+
+# Batch size
+clustFullBatchSize = 100
 
 
 #####################################################################
