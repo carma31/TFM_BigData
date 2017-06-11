@@ -152,6 +152,15 @@ def parseParsedRelevantData(rawRow):
 def getFilesInDir(dirname):
 	return [f for f in os.listdir(dirname) if os.path.isfile(os.path.join(dirname, f))]
 
+
+# Get directories in parent directory function
+# Params:
+#	* dirname	- string - Parent Directory name
+# Return:
+#	* string list	- Directories in parent directory
+def getDirectoriesInDir(parentDirname):
+	return [d for d in os.listdir(parentDirname) if os.path.isdir(os.path.join(parentDirname, d))]
+
 # Transform row in CSV line function
 # Params:
 #	* row	- string list - List with fields to transform in CSV line

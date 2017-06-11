@@ -112,6 +112,12 @@ reclusteringDir = 'ReClusteringData'
 absoluteReclusteringDir = absoluteDataDir + "/" + reclusteringDir
 
 
+# ReClustering Directory Name
+reclusteringFullDataDir = 'FullReClusteringData'
+# ReClustering Directory Name Absolute Path
+absoluteReclusteringFullDataDir = absoluteDataDir + "/" + reclusteringFullDataDir
+
+
 # ReClustering Logs Directory
 reclusteringLogDirName = "ReClustering/ReClusteringLog"
 # Clustering Logs Directory Absolute Path
@@ -122,6 +128,16 @@ reclusteringModelsDirName = "ReClustering/ReClusteringModels"
 # Clustering Models Directory Absolute Path
 absoluteReclusteringModelsDirName = absoluteResultsDir + "/" + reclusteringModelsDirName
 
+
+# ReClustering Posteriors
+reClusteringPosteriorsDir = "ReClustering/Posteriors"
+# ReClustering Posteriors Absolute Path
+absoluteReClusteringPosteriorsDir = absoluteResultsDir + "/" + reClusteringPosteriorsDir
+
+# ReClustering Entropy File Name
+reClusteringEntropyFileName = "ReClustering/Entropy.csv"
+# ReClustering Entropy File Name Absolute Path
+absoluteReClusteringEntropyFileName = absoluteResultsDir + "/" + reClusteringEntropyFileName
 
 #####################################################################
 # Aux variables configuration
