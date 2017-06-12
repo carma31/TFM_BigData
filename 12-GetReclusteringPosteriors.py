@@ -36,7 +36,7 @@ gmm = machine_learning.GMM()
 createDirectoryIfNotExists(absoluteReClusteringPosteriorsDir)
 
 # Delete previus executions data
-deleteDirectoryData(absoluteReClusteringPosteriorsDir)
+#deleteDirectoryData(absoluteReClusteringPosteriorsDir)
 
 
 reClusteringDir = absoluteResultsDir + "/ReClustering"
@@ -52,10 +52,10 @@ models = []
 for d in modelsDir:
 	modelsAux = sorted(getFilesInDir(reClusteringDir + "/" + d))
 	for m in modelsAux:
-		models.append(d + "/" + m)
+		if "0001" not in m:
+			models.append(d + "/" + m)
 
 entropyFile = open(absoluteReClusteringEntropyFileName, "w")
-
 
 for model in models:
 	if ".txt" in model:
