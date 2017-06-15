@@ -91,10 +91,16 @@ clusteringClassResDir = "ClusteringClassifications"
 # Clustering Classification Results Directory Absolute Path
 absoluteClusteringClassResDir = absoluteResultsDir + "/" + clusteringClassResDir
 
+# Clustering Full Classification Results Directory
+clusteringFullClassResDir = "ClusteringFullClassifications"
+# Clustering Full Classification Results Directory Absolute Path
+absoluteClusteringFullClassResDir = absoluteResultsDir + "/" + clusteringFullClassResDir
+
+
 # Clustering Statistics Dir
-clusteringStatisticsDir = 'ClusteringStatistics'
+clusteringFullStatisticsDir = 'ClusteringFullStatistics'
 # Clustering Statistics Dir Absolute Path
-absoluteClusteringStatisticsDir = absoluteResultsDir + "/" + clusteringStatisticsDir
+absoluteClusteringFullStatisticsDir = absoluteResultsDir + "/" + clusteringFullStatisticsDir
 
 # Customer Clusters Ocurrences File Name
 perCustomerClustFileName = 'perCustomer'
