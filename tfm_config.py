@@ -117,6 +117,10 @@ reclusteringDir = 'ReClusteringData'
 # ReClustering Directory Name Absolute Path
 absoluteReclusteringDir = absoluteDataDir + "/" + reclusteringDir
 
+# ReClustering FULL Directory Name
+reclusteringFullDir = 'ReClusteringDataFull'
+# ReClustering FULL Directory Name Absolute Path
+absoluteReclusteringFullDir = absoluteDataDir + "/" + reclusteringFullDir
 
 # ReClustering Directory Name
 reclusteringFullDataDir = 'FullReClusteringData'
@@ -133,6 +137,17 @@ absoluteReclusteringLogDirName = absoluteResultsDir + "/" + reclusteringLogDirNa
 reclusteringModelsDirName = "ReClustering/ReClusteringModels"
 # Clustering Models Directory Absolute Path
 absoluteReclusteringModelsDirName = absoluteResultsDir + "/" + reclusteringModelsDirName
+
+
+# ReClustering Full Logs Directory
+reclusteringFullLogDirName = "ReClusteringFull/ReClusteringLog"
+# ReClustering Full Logs Directory Absolute Path
+absoluteReclusteringFullLogDirName = absoluteResultsDir + "/" + reclusteringFullLogDirName
+
+# ReClustering Models Directory
+reclusteringFullModelsDirName = "ReClusteringFull/ReClusteringModels"
+# ReClustering Models Directory Absolute Path
+absoluteReclusteringFullModelsDirName = absoluteResultsDir + "/" + reclusteringFullModelsDirName
 
 
 # ReClustering Posteriors
