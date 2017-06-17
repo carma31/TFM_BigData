@@ -160,6 +160,11 @@ reClusteringEntropyFileName = "ReClustering/Entropy.csv"
 # ReClustering Entropy File Name Absolute Path
 absoluteReClusteringEntropyFileName = absoluteResultsDir + "/" + reClusteringEntropyFileName
 
+
+# ReClustering Classification Dir Name
+reClusteringClassificationDir = "ReClusteringClassifications"
+absoluteReClusteringClassificationsDir = absoluteResultsDir + "/" + reClusteringClassificationDir
+
 #####################################################################
 # Aux variables configuration
 #####################################################################
