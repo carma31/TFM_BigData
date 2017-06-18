@@ -30,7 +30,7 @@ from pyspark import SparkContext
 # Get current time to monitorize execution time
 executionStartTime = time.time()
 
-"""
+
 # Results Directory Creation
 createDirectoryIfNotExists(absoluteReclusteringFullDir)
 
@@ -75,11 +75,10 @@ for f in normalizedDatasets:
 		print getCurrentDateTimeString() + " - Parsed file " + auxFileName
 
 spark_context.stop()
-"""
+
 
 # Get training data
 trainingFiles = sorted(getFilesInDir(absoluteReclusteringFullDir))
-trainingFiles = filter(lambda x: int(x.split("-")[0]) > 15, trainingFiles)
 
 # For each file fit an other GMM model
 for trainingFile in trainingFiles:
