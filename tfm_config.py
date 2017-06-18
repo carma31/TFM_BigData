@@ -160,10 +160,19 @@ reClusteringEntropyFileName = "ReClustering/Entropy.csv"
 # ReClustering Entropy File Name Absolute Path
 absoluteReClusteringEntropyFileName = absoluteResultsDir + "/" + reClusteringEntropyFileName
 
+# ReClustering Parsed Entropy File Name
+reClusteringParsedEntropyFileName = "ReClustering/Parsed-Entropy.csv"
+# ReClustering Parsed Entropy File Name Absolute Path
+absoluteReClusteringParsedEntropyFileName = absoluteResultsDir + "/" + reClusteringParsedEntropyFileName
+
 
 # ReClustering Classification Dir Name
 reClusteringClassificationDir = "ReClusteringClassifications"
 absoluteReClusteringClassificationsDir = absoluteResultsDir + "/" + reClusteringClassificationDir
+
+# NN DatasetDir
+nnDatasets = "NeuralNetworksDatasets"
+absoluteNnDatasets = absoluteDataDir + "/" + nnDatasets
 
 #####################################################################
 # Aux variables configuration
