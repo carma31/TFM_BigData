@@ -36,7 +36,7 @@ gmm = machine_learning.GMM()
 createDirectoryIfNotExists(absoluteReClusteringPosteriorsDir)
 
 # Delete previus executions data
-#deleteDirectoryData(absoluteReClusteringPosteriorsDir)
+deleteDirectoryData(absoluteReClusteringPosteriorsDir)
 
 
 reClusteringDir = absoluteResultsDir + "/ReClustering"
@@ -46,7 +46,7 @@ reClusteringDir = absoluteResultsDir + "/ReClustering"
 directories = sorted(getDirectoriesInDir(reClusteringDir))
 modelsDir = filter(lambda d: "ReClusteringModels" in d, directories)
 
-modelsDir = filter(lambda d: not ("0192" in d or "239" in d or "296" in d), modelsDir)
+modelsDir = filter(lambda d: not ("239" in d or "296" in d), modelsDir)
 
 models = []
 for d in modelsDir:
@@ -73,7 +73,7 @@ for model in models:
 		try:
 			gmm.load_from_text(reClusteringDir + "/" + model)
 		except Exception:
-			print "Erro loading " + model
+			print "Error loading " + model
 			continue
 		
 		# Get sample components
