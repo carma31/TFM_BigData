@@ -230,6 +230,14 @@ def show_errors( time, Y_true, Y_predict, with_graphs=False ):
         pyplot.show()
 
 
+def tupleToStr(t):
+	s = ""
+	for i in xrange(len(t)):
+		s += "-" + str(t[i])
+	s = s[1:]
+	return s
+		
+
 verboseFit = 0
 maxPreviousDays = 15
 #maxEpochs = 1500
@@ -238,8 +246,16 @@ maxEpochs = 1000
 epochsIncrement = 20
 nnTypes = ["Feed Forward", "Convolutional", "LSTM"]
 model_datasets = ["/home/kike/Escritorio/TFM/Data/NeuralNetworksDatasets/0154/d/075/0004"]
+resultsFilename = "/home/kike/Escritorio/TFM/Results/NN-Results.csv"
+
+resultsFile = open(resultsFilename, "w")
+header = ["Model", "Component", "NN-Type", "PreviousDays", "Topology", "Epochs", "MSE1", "MAE1", "MAPE1", "MSE2", "MAE2", "MAPE2"]
+resultsFile.write(toCSVLine(header) + "\n")
 
 for model_dataset in model_datasets:
+
+	model = model_dataset.split("NeuralNetworksDatasets")
+	model = model[1]
 
 	# Get current time to monitorize execution time
 	modelExecutionStartTime = time.time()
@@ -400,22 +416,34 @@ for model_dataset in model_datasets:
 						mape = mean_absolute_percentage_error(y_true[n:-2], y_predict[0:-2])
 						mse  = mean_squared_error(y_true[n:-2], y_predict[0:-2])
 					
-						print( 'MSE   %f ' % mse.mean() )
-						print( 'MAE   %f ' % mae.mean() )
-						print( 'MAPE  %7.3f%% ' % mape.mean() )
+						#print( 'MSE   %f ' % mse.mean() )
+						#print( 'MAE   %f ' % mae.mean() )
+						#print( 'MAPE  %7.3f%% ' % mape.mean() )
+						strMse = '%f ' % mse.mean()
+						strMae = '%f ' % mae.mean()
+						strMape = '%7.3f%% ' % mape.mean()
 					
-						mae  = mean_absolute_error(y_true[n:-2], y_predict[2:  ])
-						mape = mean_absolute_percentage_error(y_true[n:-2], y_predict[2:  ])
-						mse  = mean_squared_error(y_true[n:-2], y_predict[2:  ])
+						mae2  = mean_absolute_error(y_true[n:-2], y_predict[2:  ])
+						mape2 = mean_absolute_percentage_error(y_true[n:-2], y_predict[2:  ])
+						mse2  = mean_squared_error(y_true[n:-2], y_predict[2:  ])
 
-						print( 'MSE   %f ' % mse.mean() )
-						print( 'MAE   %f ' % mae.mean() )
-						print( 'MAPE  %7.3f%% ' % mape.mean() )
+						#print( 'MSE   %f ' % mse.mean() )
+						#print( 'MAE   %f ' % mae.mean() )
+						#print( 'MAPE  %7.3f%% ' % mape.mean() )
+						strMse2 = '%f ' % mse2.mean()
+						strMae2 = '%f ' % mae2.mean()
+						strMape2 = '%7.3f%% ' % mape2.mean()
+
+						
+						resultLine = [model, component, nnType.replace(" ", ""), previous_days, tupleToStr(topology), epochs, strMse, strMae, strMape, strMse2, strMae2, strMape2]
+						resultsFile.write(toCSVLine(resultLine) + "\n")
 
 						epochs += epochsIncrement
-					
-				break
-			break
-		break
-	break
+						
+
+
+	modelExecutionEndTime = time.time()
+	if verbose:
+		print getExecutionTimeMsg(modelExecutionStartTime, modelExecutionEndTime)
+
 
